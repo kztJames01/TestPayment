@@ -1,72 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/providers/provider.dart';
+import 'package:flutter_application_1/screens/product_details.dart';
+import 'package:provider/provider.dart';
 
 import '../models/products.dart';
 
 class ProductOverView extends StatelessWidget {
   ProductOverView({super.key});
-  final List<Product> loadedProducts = [
-    Product(
-      isFavorite: false,
-      category: "Clothing",
-      id: 'p1',
-      title: 'Red Shirt',
-      description: 'A red shirt - it is pretty red!',
-      price: 29.99,
-      imageUrl:
-          'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
-    ),
-    Product(
-      isFavorite: false,
-      category: 'Clothing',
-      id: 'p2',
-      title: 'Trousers',
-      description: 'A nice pair of trousers.',
-      price: 59.99,
-      imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
-    ),
-    Product(
-      isFavorite: false,
-      category: 'Clothing',
-      id: 'p3',
-      title: 'Yellow Scarf',
-      description: 'Warm and cozy - exactly what you need for the winter.',
-      price: 19.99,
-      imageUrl:
-          'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
-    ),
-    Product(
-      isFavorite: false,
-      category: 'Utensils',
-      id: 'p4',
-      title: 'A Pan',
-      description: 'Prepare any meal you want.',
-      price: 49.99,
-      imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
-    ),
-  ];
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: Theme.of(context).appBarTheme.iconTheme!.color,
-              size: Theme.of(context).appBarTheme.iconTheme!.size,
-            )),
-      ),
-      body: Container(
-        height: size.height * 0.9,
-        width: size.width,
-        child: Column(),
-      ),
-    );
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                color: Theme.of(context).appBarTheme.iconTheme!.color,
+                size: Theme.of(context).appBarTheme.iconTheme!.size,
+              )),
+        ),
+        body: productGrid());
+  }
+}
+
+class productGrid extends StatelessWidget {
+  const productGrid({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final productData = Provider.of<ProductProvider>(context).item;
+    return GridView.builder(
+        itemCount: productData.length,
+        padding: const EdgeInsets.all(10),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 3 / 2,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            crossAxisCount: 2),
+        itemBuilder: (context, index) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: GridTile(
+              footer: GridTileBar(
+                subtitle: Text(
+                  productData[index].price.toString(),
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+                backgroundColor: Colors.black45,
+                title: Text(
+                  productData[index].title,
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+                trailing: IconButton(
+                    onPressed: () {
+                      productData[index].isFavorite == true;
+                    },
+                    icon: Icon(Icons.arrow_right,
+                        color: Theme.of(context).iconTheme.color,
+                        size: Theme.of(context).iconTheme.size)),
+                leading: IconButton(
+                    onPressed: () {
+                      productData[index].isFavorite == true;
+                    },
+                    icon: Icon(Icons.favorite,
+                        color: Theme.of(context).iconTheme.color,
+                        size: Theme.of(context).iconTheme.size)),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(PackageDetails.RouteName,
+                      arguments: productData[index].id);
+                },
+                child: Image.network(
+                  productData[index].imageUrl,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          );
+        });
   }
 }
