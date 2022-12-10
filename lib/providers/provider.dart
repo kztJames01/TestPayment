@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/models/products.dart';
 
 class ProductProvider with ChangeNotifier {
-  List<Product> _items = [
+  final List<Product> _items = [
     Product(
       isFavorite: false,
       category: "Clothing",

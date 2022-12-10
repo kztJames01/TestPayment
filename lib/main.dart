@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         ),
         home: const MyHomePage(title: 'Flutter Demo Home Page'),
         routes: {
-          PackageDetails.RouteName : (context) => PackageDetails()
+          PackageDetails.RouteName : (context) => const PackageDetails()
         },
       ),
     );
