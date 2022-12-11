@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 class Product with ChangeNotifier {
-  final String id;
+  final String? id;
   final String title;
   final String imageUrl;
-  final String category;
-  final String description;
+  final String? category;
+  final String? description;
   final double price;
   bool isFavorite = false;
 
@@ -23,4 +23,5 @@ class Product with ChangeNotifier {
     isFavorite = !isFavorite;
     notifyListeners();
   }
+ 
 }

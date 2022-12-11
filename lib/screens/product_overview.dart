@@ -1,3 +1,4 @@
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/providers/provider.dart';
 import 'package:flutter_application_1/screens/product_details.dart';
@@ -5,12 +6,23 @@ import 'package:provider/provider.dart';
 
 import '../models/products.dart';
 
-class ProductOverView extends StatelessWidget {
-  ProductOverView({super.key});
+enum FilterOptions { Favorites, All }
+
+bool selectedValue = false;
+
+class ProductOverView extends StatefulWidget {
+  const ProductOverView({super.key});
 
   @override
+  State<ProductOverView> createState() => _ProductOverViewState();
+}
+
+class _ProductOverViewState extends State<ProductOverView> {
+  @override
   Widget build(BuildContext context) {
-    final productData = Provider.of<ProductProvider>(context).item;
+    final productData = Provider.of<ProductProvider>(context);
+    final products =
+        selectedValue == true ? productData.FavouriteItems : productData.item;
     var size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
@@ -24,23 +36,50 @@ class ProductOverView extends StatelessWidget {
                 color: Theme.of(context).appBarTheme.iconTheme!.color,
                 size: Theme.of(context).appBarTheme.iconTheme!.size,
               )),
+          actions: [
+            PopupMenuButton(
+                icon: Icon(FluentIcons.filter_28_regular),
+                onSelected: (FilterOptions value) {
+                  setState(() {
+                    if (value == FilterOptions.Favorites) {
+                      selectedValue = true;
+                    } else {
+                      selectedValue = false;
+                    }
+                  });
+                },
+                itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        child: Text("Show All"),
+                        value: FilterOptions.All,
+                      ),
+                      const PopupMenuItem(
+                        child: Text("Favorites"),
+                        value: FilterOptions.Favorites,
+                      )
+                    ])
+          ],
         ),
-        body: GridView.builder(
-            itemCount: productData.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 3 / 2),
-            itemBuilder: (context, index) => ChangeNotifierProvider(
-                create: (context) => productData[index],
-                child: const productGrid())));
+        body: Container(
+            width: size.width,
+            height: size.height * 0.9,
+            child: GridView.builder(
+              itemCount: products.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 3 / 2),
+              itemBuilder: (context, index) => ChangeNotifierProvider.value(
+                  value: products[index], child: productGrid()),
+            )));
   }
 }
 
 class productGrid extends StatelessWidget {
-  const productGrid({super.key});
-
+  const productGrid({
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context);
