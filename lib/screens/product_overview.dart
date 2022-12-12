@@ -1,7 +1,9 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/cart.dart';
 import 'package:flutter_application_1/providers/provider.dart';
 import 'package:flutter_application_1/screens/product_details.dart';
+import 'package:flutter_application_1/widgets/badge.dart';
 import 'package:provider/provider.dart';
 
 import '../models/products.dart';
@@ -21,6 +23,7 @@ class _ProductOverViewState extends State<ProductOverView> {
   @override
   Widget build(BuildContext context) {
     final productData = Provider.of<ProductProvider>(context);
+
     final products =
         selectedValue == true ? productData.FavouriteItems : productData.item;
     var size = MediaQuery.of(context).size;
@@ -57,7 +60,22 @@ class _ProductOverViewState extends State<ProductOverView> {
                         child: Text("Favorites"),
                         value: FilterOptions.Favorites,
                       )
-                    ])
+                    ]),
+            Consumer<Cart>(
+              builder: (_, value, child1) => Badge(
+                  color: Colors.black,
+                  value: value.itemCount.toString(),
+                  child: child1!),
+              child: IconButton(
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: Colors.black,
+                ),
+                onPressed: (() {
+                 
+                }),
+              ),
+            )
           ],
         ),
         body: Container(
@@ -83,6 +101,7 @@ class productGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context);
+    final cart = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -98,7 +117,7 @@ class productGrid extends StatelessWidget {
           ),
           trailing: IconButton(
               onPressed: () {},
-              icon: Icon(Icons.arrow_right,
+              icon: Icon(FluentIcons.shopping_bag_24_regular,
                   color: Theme.of(context).iconTheme.color,
                   size: Theme.of(context).iconTheme.size)),
           leading: IconButton(
