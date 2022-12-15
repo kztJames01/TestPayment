@@ -28,7 +28,7 @@ class Cart with ChangeNotifier {
       _items.update(
           productId,
           (existingValue) => CartItem(
-              id: existingValue.id,
+              id: DateTime.now().toString(),
               title: existingValue.title,
               price: existingValue.price,
               quantity: existingValue.quantity + 1));
@@ -36,7 +36,7 @@ class Cart with ChangeNotifier {
       _items.putIfAbsent(
           productId,
           () => CartItem(
-              id: productId, title: title, price: price, quantity: quantity));
+              id: productId, title: title, price: price, quantity: 1));
     }
     notifyListeners();
   }

@@ -23,7 +23,7 @@ class _ProductOverViewState extends State<ProductOverView> {
   @override
   Widget build(BuildContext context) {
     final productData = Provider.of<ProductProvider>(context);
-
+    final cart = Provider.of<Cart>(context);
     final products =
         selectedValue == true ? productData.FavouriteItems : productData.item;
     var size = MediaQuery.of(context).size;
@@ -72,7 +72,7 @@ class _ProductOverViewState extends State<ProductOverView> {
                   color: Colors.black,
                 ),
                 onPressed: (() {
-                 
+                  
                 }),
               ),
             )
@@ -116,7 +116,13 @@ class productGrid extends StatelessWidget {
             style: Theme.of(context).textTheme.headline4,
           ),
           trailing: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                cart.addItem(
+                      product.id.toString(),
+                      product.title,
+                      product.price,
+                      1);
+              },
               icon: Icon(FluentIcons.shopping_bag_24_regular,
                   color: Theme.of(context).iconTheme.color,
                   size: Theme.of(context).iconTheme.size)),
