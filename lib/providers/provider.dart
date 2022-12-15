@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/models/products.dart';
 
 class ProductProvider with ChangeNotifier {
-  List<Product> _items = [
+  final List<Product> _items = [
     Product(
       isFavorite: false,
       category: "Clothing",
@@ -48,11 +48,15 @@ class ProductProvider with ChangeNotifier {
     return [..._items];
   }
 
-  Product findbyId(String id) {
-    return _items.firstWhere((element) => element.id == id);
+  List<Product> get FavouriteItems {
+    return _items
+        .where(
+          (element) => element.isFavorite,
+        )
+        .toList();
   }
 
-  void addValue() {
-    notifyListeners();
+  Product findbyId(String id) {
+    return _items.firstWhere((element) => element.id == id);
   }
 }
