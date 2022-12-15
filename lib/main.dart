@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/cart.dart';
 import 'package:flutter_application_1/providers/provider.dart';
+import 'package:flutter_application_1/screens/cart_screen.dart';
 import 'package:flutter_application_1/screens/product_details.dart';
 import 'package:flutter_application_1/screens/product_overview.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,10 @@ class MyApp extends StatelessWidget {
         ),
         home: const MyHomePage(title: 'Flutter Demo Home Page'),
         routes: {
-          PackageDetails.RouteName : (context) => const PackageDetails()
+          PackageDetails.RouteName : (context) => const PackageDetails(),
+          CartScreen.routeName:(context) { return 
+            const CartScreen();
+          }
         },
       ),
     );

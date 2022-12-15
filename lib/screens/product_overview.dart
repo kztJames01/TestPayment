@@ -2,6 +2,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/cart.dart';
 import 'package:flutter_application_1/providers/provider.dart';
+import 'package:flutter_application_1/screens/cart_screen.dart';
 import 'package:flutter_application_1/screens/product_details.dart';
 import 'package:flutter_application_1/widgets/badge.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +73,7 @@ class _ProductOverViewState extends State<ProductOverView> {
                   color: Colors.black,
                 ),
                 onPressed: (() {
-                  
+                  Navigator.pushNamed(context, CartScreen.routeName);
                 }),
               ),
             )
@@ -118,10 +119,7 @@ class productGrid extends StatelessWidget {
           trailing: IconButton(
               onPressed: () {
                 cart.addItem(
-                      product.id.toString(),
-                      product.title,
-                      product.price,
-                      1);
+                    product.id.toString(), product.title, product.price, 1);
               },
               icon: Icon(FluentIcons.shopping_bag_24_regular,
                   color: Theme.of(context).iconTheme.color,
