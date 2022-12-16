@@ -68,6 +68,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "intl",
+      "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.18.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "lints",
       "rootUri": "file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/lints-2.0.1",
       "packageUri": "lib/",
@@ -164,7 +170,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2022-12-04T22:49:41.746136Z",
+  "generated": "2022-12-16T04:14:32.702379Z",
   "generator": "pub",
   "generatorVersion": "2.18.5"
 }

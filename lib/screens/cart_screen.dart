@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/order.dart';
+import 'package:flutter_application_1/screens/order_screen.dart';
 import 'package:flutter_application_1/widgets/cart_items.dart';
 import 'package:provider/provider.dart';
 
@@ -11,8 +13,21 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
+    final order = Provider.of<Order>(context);
     return Scaffold(
-      appBar: AppBar(title: Text("Cart")),
+      appBar: AppBar(
+        title: Text(
+          "Cart",
+          style: TextStyle(color: Colors.black),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, OrderScreen.orderRouteName);
+              },
+              child: Text("Order Screen"))
+        ],
+      ),
       body: Column(children: [
         Card(
           margin: EdgeInsets.all(5),
@@ -21,7 +36,7 @@ class CartScreen extends StatelessWidget {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Total",
                     style: TextStyle(color: Colors.black),
                   ),
@@ -33,21 +48,28 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Colors.black,
                   ),
-                  TextButton(onPressed: () {}, child: Text("Order Now")),
+                  TextButton(
+                      onPressed: () {
+                        order.addOrder(
+                            cart.items.values.toList(), cart.totalAmount);
+                        cart.clearWhenOrder();
+                      },
+                      child: Text("Order Now")),
                 ]),
           ),
         ),
         Expanded(
           child: ListView.builder(
-            itemCount:cart.items.length,
-            itemBuilder: ((context, index) {
-            return CartItem(
-                //using values.toList()
-                id: cart.items.values.toList()[index].id,
-                title: cart.items.values.toList()[index].title,
-                price: cart.items.values.toList()[index].price,
-                quantity: cart.items.values.toList()[index].quantity);
-          })),
+              itemCount: cart.items.length,
+              itemBuilder: ((context, index) {
+                return CartItem(
+                    //using values.toList()
+                    id: cart.items.values.toList()[index].id,
+                    productId: cart.items.keys.toList()[index],
+                    title: cart.items.values.toList()[index].title,
+                    price: cart.items.values.toList()[index].price,
+                    quantity: cart.items.values.toList()[index].quantity);
+              })),
         )
       ]),
     );
