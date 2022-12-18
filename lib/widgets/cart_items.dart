@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,8 +23,29 @@ class CartItem extends StatelessWidget {
     return Dismissible(
       key: ValueKey(id),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) async{
+        return await showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                  title: Text("Alert"),
+                  content: Text("Are you sure you want to delete?"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(ctx).pop(false);
+                      },
+                      child: Text("No"),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(ctx).pop(true);
+                        },
+                        child: Text("Yes"))
+                  ],
+                ));
+      },
       onDismissed: (direction) {
-        Provider.of<Cart>(context,listen: false).removeItem(productId);
+        Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
       child: Card(
         child: ListTile(

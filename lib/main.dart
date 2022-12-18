@@ -22,8 +22,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(providers: [
       ChangeNotifierProvider.value(
       value: ProductProvider(),),
-      ChangeNotifierProvider.value(value: Cart()),
-      ChangeNotifierProvider.value(value: Order())
+      ChangeNotifierProvider(create: (context) => ProductProvider()),
+      ChangeNotifierProvider(create: (context) => Cart()),
+      ChangeNotifierProvider(create: (context) => Order()),
     ],
     
       child: MaterialApp(
@@ -50,10 +51,8 @@ class MyApp extends StatelessWidget {
         ),
         home: const MyHomePage(title: 'Flutter Demo Home Page'),
         routes: {
-          PackageDetails.RouteName : (context) => const PackageDetails(),
-          CartScreen.routeName:(context) { return 
-            const CartScreen();
-          },
+          PackageDetails.RouteName : (context) =>  PackageDetails(),
+          CartScreen.routeName : (context)=> CartScreen(),
           OrderScreen.orderRouteName:(context) => OrderScreen()
         },
       ),
@@ -73,7 +72,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: ProductOverView(),
       ),

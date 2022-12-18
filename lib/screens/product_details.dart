@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 class PackageDetails extends StatelessWidget {
   const PackageDetails({super.key});
-  static const RouteName = '/product_details.dart';
+  static String RouteName = '/product_details';
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

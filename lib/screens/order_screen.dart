@@ -9,8 +9,8 @@ import '../models/order.dart' as ord;
 import '../models/order.dart';
 
 class OrderScreen extends StatelessWidget {
-  static const orderRouteName = '/order';
-  OrderScreen({super.key,});
+  static String orderRouteName = '/order_screen';
+  OrderScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +67,9 @@ class _OrderItemState extends State<OrderItem> {
                     ),
                     if (_expanded)
                       Container(
+                        padding: const EdgeInsets.all(10),
                         height:
-                            min(widget.order.products.length * 20.0 + 100, 180),
+                            min(widget.order.products.length * 10.0 + 100, 100),
                         child: ListView(
                             children: widget.order.products
                                 .map((product) => Row(

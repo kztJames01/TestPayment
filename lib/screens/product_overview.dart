@@ -6,7 +6,6 @@ import 'package:flutter_application_1/screens/cart_screen.dart';
 import 'package:flutter_application_1/screens/product_details.dart';
 import 'package:flutter_application_1/widgets/badge.dart';
 import 'package:provider/provider.dart';
-
 import '../models/products.dart';
 
 enum FilterOptions { Favorites, All }
@@ -120,6 +119,24 @@ class productGrid extends StatelessWidget {
               onPressed: () {
                 cart.addItem(
                     product.id.toString(), product.title, product.price, 1);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Theme.of(context).primaryColorDark,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    duration: const Duration(seconds: 3),
+                    action: SnackBarAction(
+                      label: "Undo",
+                      textColor: Colors.amber[300],
+                      onPressed: () {
+                        cart.removeSingleItem(product.id.toString());
+                      },
+                    ),
+                    margin: const EdgeInsets.all(10),
+                    behavior: SnackBarBehavior.floating,
+                    content: Text(
+                      "Added Item",
+                      style: Theme.of(context).textTheme.bodyText2,
+                    )));
               },
               icon: Icon(FluentIcons.shopping_bag_24_regular,
                   color: Theme.of(context).iconTheme.color,
@@ -135,8 +152,8 @@ class productGrid extends StatelessWidget {
         ),
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context)
-                .pushNamed(PackageDetails.RouteName, arguments: product.id);
+            Navigator.pushNamed(context, PackageDetails.RouteName,
+                arguments: product.id);
           },
           child: Image.network(
             product.imageUrl,

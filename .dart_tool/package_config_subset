@@ -2,6 +2,10 @@ flutter_application_1
 2.18
 file:///C:/Users/Asus/code/flutter_application_1/
 file:///C:/Users/Asus/code/flutter_application_1/lib/
+alert
+2.12
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/alert-2.0.1/
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/alert-2.0.1/lib/
 async
 2.14
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.9.0/
@@ -38,6 +42,10 @@ flutter_lints
 2.17
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-2.0.1/
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-2.0.1/lib/
+get
+2.15
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/get-4.6.5/
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/get-4.6.5/lib/
 intl
 2.12
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.18.0/
@@ -70,6 +78,10 @@ provider
 2.12
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.4/
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.4/lib/
+snackbar
+2.18
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/snackbar-1.0.1/
+file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/snackbar-1.0.1/lib/
 source_span
 2.14
 file:///C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.9.0/

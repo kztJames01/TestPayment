@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../models/cart.dart' show Cart;
 
 class CartScreen extends StatelessWidget {
-  static const routeName = "/cart";
+  static String routeName = "/cart_screen";
   const CartScreen({super.key});
 
   @override
@@ -19,7 +19,7 @@ class CartScreen extends StatelessWidget {
         title: Text(
           "Cart",
           style: TextStyle(color: Colors.black),
-        ),
+        ), 
         actions: [
           TextButton(
               onPressed: () {
@@ -30,9 +30,9 @@ class CartScreen extends StatelessWidget {
       ),
       body: Column(children: [
         Card(
-          margin: EdgeInsets.all(5),
+          margin: const EdgeInsets.all(5),
           child: Padding(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
