@@ -14,6 +14,7 @@ class OrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     final orderData = Provider.of<Order>(context);
     return Scaffold(
       appBar: AppBar(
@@ -24,9 +25,13 @@ class OrderScreen extends StatelessWidget {
           },
         ),
       ),
-      body: ListView.builder(
-          itemCount: orderData.orders.length,
-          itemBuilder: (context, index) => OrderItem(order: orderData.order[index],index: index,)),
+      body: Container(
+        width: size.width,
+        height: size.height,
+        child: ListView.builder(
+            itemCount: orderData.orders.length,
+            itemBuilder: (context, index) => OrderItem(order: orderData.order[index],index: index,)),
+      ),
     );
   }
 }
