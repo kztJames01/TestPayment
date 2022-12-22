@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 class PackageDetails extends StatelessWidget {
   const PackageDetails({super.key});
-  static const RouteName = '/product_details.dart';
+  static String RouteName = '/product_details';
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -25,14 +25,15 @@ class PackageDetails extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(
-        color: Theme.of(context).primaryColor,
-        width: size.width,
-        height: size.height,
+      body: SingleChildScrollView(
         child: Column(children: [
-          Image.network(
-            loadedProduct.imageUrl,
-            fit: BoxFit.cover,
+          Container(
+            height: 300,
+            width: double.infinity,
+            child: Image.network(
+              loadedProduct.imageUrl,
+              fit: BoxFit.cover,
+            ),
           ),
           Text(
             loadedProduct.title,
