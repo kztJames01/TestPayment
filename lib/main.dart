@@ -6,12 +6,9 @@ import 'package:flutter_application_1/screens/order_screen.dart';
 import 'package:flutter_application_1/screens/product_details.dart';
 import 'package:flutter_application_1/screens/product_overview.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/widgets.dart';
-
 import 'models/order.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -23,9 +20,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey _widgetKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
-    final key = GlobalKey();
+    void didChangeDependencies() {
+      context.dependOnInheritedWidgetOfExactType(aspect: _widgetKey);
+    }
+    //if the app is rebuilt with null values fix with globalkey and notify with didChangeDependencies
+    @override
+    void initState() {
+      didChangeDependencies();
+      super.initState();
+    }
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: ProductProvider()),
@@ -74,15 +82,34 @@ class _MyAppState extends State<MyApp> {
                 backgroundColor: Colors.white,
                 elevation: 0,
                 iconTheme: IconThemeData(color: Colors.black, size: 24))),
-        home: ProductOverView(
-          key: key,
+        home: MyHome(
+          key: _widgetKey,
         ),
         routes: {
-          PackageDetails.RouteName: (context) => PackageDetails(),
-          CartScreen.routeName: (context) => CartScreen(),
+          PackageDetails.RouteName: (context) => const PackageDetails(),
+          CartScreen.routeName: (context) => const CartScreen(),
           OrderScreen.orderRouteName: (context) => OrderScreen()
         },
       ),
+    );
+  }
+}
+
+class MyHome extends StatefulWidget {
+  const MyHome({super.key});
+
+  @override
+  State<MyHome> createState() => _MyHomeState();
+}
+
+class _MyHomeState extends State<MyHome> {
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (p0, p1) => Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: ProductOverView()),
     );
   }
 }

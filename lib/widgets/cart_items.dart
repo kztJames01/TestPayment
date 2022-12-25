@@ -10,7 +10,7 @@ class CartItem extends StatelessWidget {
   final String productId;
   final double price;
   final int quantity;
-  CartItem(
+  const CartItem(
       {super.key,
       required this.id,
       required this.productId,
@@ -27,20 +27,20 @@ class CartItem extends StatelessWidget {
         return await showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
-                  title: Text("Alert"),
-                  content: Text("Are you sure you want to delete?"),
+                  title: const Text("Alert"),
+                  content: const Text("Are you sure you want to delete?"),
                   actions: [
                     TextButton(
                       onPressed: () {
                         Navigator.of(ctx).pop(false);
                       },
-                      child: Text("No"),
+                      child: const Text("No"),
                     ),
                     TextButton(
                         onPressed: () {
                           Navigator.of(ctx).pop(true);
                         },
-                        child: Text("Yes"))
+                        child: const Text("Yes"))
                   ],
                 ));
       },

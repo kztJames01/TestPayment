@@ -26,7 +26,7 @@ class _ProductOverViewState extends State<ProductOverView> {
     final cart = Provider.of<Cart>(context);
     final products =
         selectedValue == true ? productData.FavouriteItems : productData.item;
-    var size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).appBarTheme.backgroundColor,

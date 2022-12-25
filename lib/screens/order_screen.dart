@@ -30,14 +30,17 @@ class OrderScreen extends StatelessWidget {
         height: size.height,
         child: ListView.builder(
             itemCount: orderData.orders.length,
-            itemBuilder: (context, index) => OrderItem(order: orderData.order[index],index: index,)),
+            itemBuilder: (context, index) => OrderItem(
+                  order: orderData.order[index],
+                  index: index,
+                )),
       ),
     );
   }
 }
 
 class OrderItem extends StatefulWidget {
-  OrderItem({super.key,required this.order,required this.index});
+  OrderItem({super.key, required this.order, required this.index});
   final int index;
   final ord.OrderItem order;
   @override
@@ -45,49 +48,53 @@ class OrderItem extends StatefulWidget {
 }
 
 class _OrderItemState extends State<OrderItem> {
-   bool _expanded = false;
+  bool _expanded = false;
   @override
   Widget build(BuildContext context) {
-     final orderData = Provider.of<Order>(context);
+    final orderData = Provider.of<Order>(context);
     return Card(
-                margin: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    ListTile(
-                      contentPadding: const EdgeInsets.all(8),
-                      title: Text(
-                        "\$${orderData.orders[widget.index].total}",
-                      ),
-                      trailing: IconButton(
-                        icon: Icon(
-                            _expanded ? Icons.expand_less : Icons.expand_more),
-                        onPressed: () {
-                          setState(() {
-                            _expanded = !_expanded;
-                          });
-                        },
-                      ),
-                      subtitle: Text(DateFormat.yMMMEd()
-                          .format(orderData.orders[widget.index].dateTime)),
-                    ),
-                    if (_expanded)
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        height:
-                            min(widget.order.products.length * 10.0 + 100, 100),
-                        child: ListView(
-                            children: widget.order.products
-                                .map((product) => Row(
-                                      children: <Widget>[
-                                        Text(product.title,style: TextStyle(color: Colors.black),),
-                                        Spacer(),
-                                        Text('${product.quantity}x \$${product.price}',style: TextStyle(color: Colors.blueGrey),)
-                                      ],
-                                    ))
-                                .toList()),
-                      )
-                  ],
-                ),
-              );
+      margin: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          ListTile(
+            contentPadding: const EdgeInsets.all(8),
+            title: Text(
+              "\$${orderData.orders[widget.index].total}",
+            ),
+            trailing: IconButton(
+              icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+              onPressed: () {
+                setState(() {
+                  _expanded = !_expanded;
+                });
+              },
+            ),
+            subtitle: Text(DateFormat.yMMMEd()
+                .format(orderData.orders[widget.index].dateTime)),
+          ),
+          if (_expanded)
+            Container(
+              padding: const EdgeInsets.all(10),
+              height: min(widget.order.products.length * 10.0 + 100, 100),
+              child: ListView(
+                  children: widget.order.products
+                      .map((product) => Row(
+                            children: <Widget>[
+                              Text(
+                                product.title,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Spacer(),
+                              Text(
+                                '${product.quantity}x \$${product.price}',
+                                style: TextStyle(color: Colors.blueGrey),
+                              )
+                            ],
+                          ))
+                      .toList()),
+            )
+        ],
+      ),
+    );
   }
 }
