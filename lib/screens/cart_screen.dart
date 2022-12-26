@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/order.dart';
+import 'package:flutter_application_1/screens/edit_screen.dart';
 import 'package:flutter_application_1/screens/order_screen.dart';
 import 'package:flutter_application_1/widgets/cart_items.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,12 @@ class CartScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, OrderScreen.orderRouteName);
               },
-              child: Text("Order Screen"))
+              child: Text("Order Screen")),
+              TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Edit.routeName);
+              },
+              child: Text("Edit Screen"))
         ],
       ),
       body: Column(children: [

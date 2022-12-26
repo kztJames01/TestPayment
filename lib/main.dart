@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/cart.dart';
 import 'package:flutter_application_1/providers/provider.dart';
 import 'package:flutter_application_1/screens/cart_screen.dart';
+import 'package:flutter_application_1/screens/edit_screen.dart';
 import 'package:flutter_application_1/screens/order_screen.dart';
 import 'package:flutter_application_1/screens/product_details.dart';
 import 'package:flutter_application_1/screens/product_overview.dart';
@@ -86,6 +87,7 @@ class _MyAppState extends State<MyApp> {
           key: _widgetKey,
         ),
         routes: {
+          Edit.routeName:(context) => const Edit(),
           PackageDetails.RouteName: (context) => const PackageDetails(),
           CartScreen.routeName: (context) => const CartScreen(),
           OrderScreen.orderRouteName: (context) => OrderScreen()
