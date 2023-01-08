@@ -6,6 +6,7 @@ import 'package:flutter_application_1/screens/edit_screen.dart';
 import 'package:flutter_application_1/screens/order_screen.dart';
 import 'package:flutter_application_1/screens/product_details.dart';
 import 'package:flutter_application_1/screens/product_overview.dart';
+import 'package:flutter_application_1/screens/userProduct.dart';
 import 'package:provider/provider.dart';
 import 'models/order.dart';
 
@@ -87,7 +88,7 @@ class _MyAppState extends State<MyApp> {
           key: _widgetKey,
         ),
         routes: {
-          Edit.routeName:(context) => const Edit(),
+          UserProduct.routeName:(context) => UserProduct(),
           PackageDetails.RouteName: (context) => const PackageDetails(),
           CartScreen.routeName: (context) => const CartScreen(),
           OrderScreen.orderRouteName: (context) => OrderScreen()

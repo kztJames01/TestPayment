@@ -27,11 +27,7 @@ class CartScreen extends StatelessWidget {
                 Navigator.pushNamed(context, OrderScreen.orderRouteName);
               },
               child: Text("Order Screen")),
-              TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Edit.routeName);
-              },
-              child: Text("Edit Screen"))
+              
         ],
       ),
       body: Column(children: [

@@ -4,9 +4,11 @@ import 'package:flutter_application_1/models/cart.dart';
 import 'package:flutter_application_1/providers/provider.dart';
 import 'package:flutter_application_1/screens/cart_screen.dart';
 import 'package:flutter_application_1/screens/product_details.dart';
+import 'package:flutter_application_1/screens/userProduct.dart';
 import 'package:flutter_application_1/widgets/badge.dart';
 import 'package:provider/provider.dart';
 import '../models/products.dart';
+import 'edit_screen.dart';
 
 enum FilterOptions { Favorites, All }
 
@@ -28,17 +30,20 @@ class _ProductOverViewState extends State<ProductOverView> {
         selectedValue == true ? productData.FavouriteItems : productData.item;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      drawer: Drawer(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 40,left: 10),
+                    child: ListTile(
+                      leading: Text("Product",style: TextStyle(color: Colors.black),),
+                      onTap: () {
+                        Navigator.of(context).pushNamed(UserProduct.routeName);
+                      },
+                    ),
+                  ),
+                ),
         appBar: AppBar(
           backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: Theme.of(context).appBarTheme.iconTheme!.color,
-                size: Theme.of(context).appBarTheme.iconTheme!.size,
-              )),
+          
           actions: [
             PopupMenuButton(
                 icon: Icon(FluentIcons.filter_28_regular),
