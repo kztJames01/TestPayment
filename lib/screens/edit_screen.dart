@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/products.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +14,7 @@ class Edit extends StatefulWidget {
 
 class _EditState extends State<Edit> {
   final _form = GlobalKey<FormState>();
-  var isInit = false;
+  var isInit = true;
   TextEditingController controller = TextEditingController();
   TextEditingController controller1 = TextEditingController();
   TextEditingController controller2 = TextEditingController();
@@ -72,11 +70,11 @@ class _EditState extends State<Edit> {
         _editedProduct = Provider.of<ProductProvider>(context, listen: false)
             .findbyId(widget.oldProd.id.toString());
         initialValues = {
-          'title': _editedProduct.title,
-          'price': _editedProduct.price.toString(),
-          'description': _editedProduct.description.toString()
+          'title': widget.oldProd.title,
+          'price': widget.oldProd.price.toString(),
+          'description': widget.oldProd.description.toString()
         };
-        controller3.text = _editedProduct.imageUrl;
+        controller3.text = widget.oldProd.imageUrl;
       }
     }
     isInit = false;
@@ -91,7 +89,7 @@ class _EditState extends State<Edit> {
     }
     _form.currentState!.save();
     if (widget.oldProd.id != null) {
-      Provider.of<ProductProvider>(context,listen: false)
+      Provider.of<ProductProvider>(context, listen: false)
           .updateProduct(widget.oldProd.id.toString(), _editedProduct);
     } else {
       Provider.of<ProductProvider>(context, listen: false)
@@ -137,15 +135,14 @@ class _EditState extends State<Edit> {
                     }
                     return null;
                   },
-                 onSaved: (newValue) => _editedProduct = Product(
-                          id: DateTime.now().toString(),
-                          title: newValue.toString(),
-                          imageUrl: _editedProduct.imageUrl,
-                          category: widget.oldProd.category,
-                          description: _editedProduct.description,
-                          price: _editedProduct.price,
-                          isFavorite: widget.oldProd.isFavorite),
-                    
+                  onSaved: (newValue) => _editedProduct = Product(
+                      id: _editedProduct.id,
+                      title: newValue.toString(),
+                      imageUrl: _editedProduct.imageUrl,
+                      category: widget.oldProd.category,
+                      description: _editedProduct.description,
+                      price: _editedProduct.price,
+                      isFavorite: widget.oldProd.isFavorite),
                   onFieldSubmitted: (value) {
                     FocusScope.of(context).requestFocus(priceNode);
                   },
@@ -164,14 +161,13 @@ class _EditState extends State<Edit> {
                     return null;
                   },
                   onSaved: (newValue) => _editedProduct = Product(
-                          id: DateTime.now().toString(),
-                          title: _editedProduct.title,
-                          imageUrl: _editedProduct.imageUrl,
-                          category: widget.oldProd.category,
-                          description: _editedProduct.description,
-                          price: double.parse(newValue.toString()),
-                          isFavorite: widget.oldProd.isFavorite),
-                    
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      imageUrl: _editedProduct.imageUrl,
+                      category: widget.oldProd.category,
+                      description: _editedProduct.description,
+                      price: double.parse(newValue.toString()),
+                      isFavorite: widget.oldProd.isFavorite),
                   onFieldSubmitted: (value) {
                     FocusScope.of(context).requestFocus(desNode);
                   },
@@ -191,14 +187,13 @@ class _EditState extends State<Edit> {
                     return null;
                   },
                   onSaved: (newValue) => _editedProduct = Product(
-                          id: DateTime.now().toString(),
-                          title: _editedProduct.title,
-                          imageUrl: _editedProduct.imageUrl,
-                          category: widget.oldProd.category,
-                          description: newValue,
-                          price: _editedProduct.price,
-                          isFavorite: widget.oldProd.isFavorite),
-                    
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      imageUrl: _editedProduct.imageUrl,
+                      category: widget.oldProd.category,
+                      description: newValue,
+                      price: _editedProduct.price,
+                      isFavorite: widget.oldProd.isFavorite),
                   onFieldSubmitted: (value) {
                     FocusScope.of(context).requestFocus(imageNode);
                   },
@@ -241,7 +236,7 @@ class _EditState extends State<Edit> {
                       },
                       textInputAction: TextInputAction.done,
                       onSaved: (newValue) => _editedProduct = Product(
-                          id: DateTime.now().toString(),
+                          id: _editedProduct.id,
                           title: _editedProduct.title,
                           imageUrl: newValue.toString(),
                           category: widget.oldProd.category,
