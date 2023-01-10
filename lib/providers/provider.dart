@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/models/products.dart';
+import 'package:http/http.dart' as http;
 
 class ProductProvider with ChangeNotifier {
   final List<Product> _items = [
@@ -57,6 +60,15 @@ class ProductProvider with ChangeNotifier {
   }
 
   void addProduct(Product product) {
+    var url =
+        Uri.https('https://fluttertest-50cc9-default-rtdb.firebaseio.com','/products.json');
+    http.post(url, body: json.encode({
+      'title' : product.title,
+      'description' : product.description,
+      'imageUrl' : product.imageUrl,
+      'price' :product.price,
+      'isFavorite' : product.isFavorite
+    }));
     final newProduct = Product(
         id: DateTime.now().toString(),
         title: product.title,
@@ -75,6 +87,15 @@ class ProductProvider with ChangeNotifier {
   }
 
   void updateProduct(String id, Product newProduct) {
+    var url =
+        Uri.https('fluttertest-50cc9-default-rtdb.firebaseio.com','/products.json');
+    http.post(url, body: json.encode({
+      'title' : newProduct.title,
+      'description' : newProduct.description,
+      'imageUrl' : newProduct.imageUrl,
+      'price' :newProduct.price,
+      'isFavorite' : newProduct.isFavorite
+    }));
     final prodIndex = _items.indexWhere((element) => element.id == id);
     if (prodIndex >= 0) {
       _items[prodIndex] = newProduct;
