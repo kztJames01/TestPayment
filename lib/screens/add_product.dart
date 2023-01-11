@@ -1,19 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/products.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
+import '../models/products.dart';
 import '../providers/provider.dart';
 
-class Edit extends StatefulWidget {
-  final Product oldProd;
-  Edit({super.key, required this.oldProd});
+class AddProduct extends StatefulWidget {
+  static const addRoute = '/AddProduct';
+  const AddProduct({super.key});
 
   @override
-  State<Edit> createState() => _EditState();
+  State<AddProduct> createState() => _AddProductState();
 }
 
-class _EditState extends State<Edit> {
+class _AddProductState extends State<AddProduct> {
   final _form = GlobalKey<FormState>();
   var isInit = true;
 
@@ -22,13 +22,8 @@ class _EditState extends State<Edit> {
   FocusNode desNode = FocusNode();
   FocusNode imageNode = FocusNode();
   FocusNode titleNode = FocusNode();
-  var initialValues = {
-    'title': '',
-    'description': '',
-    'price': '',
-    'imageUrl': ''
-  };
-  Product _editedProduct = Product(
+  FocusNode cateNode = FocusNode();
+  Product newProduct = Product(
       id: null,
       title: '',
       imageUrl: '',
@@ -36,17 +31,6 @@ class _EditState extends State<Edit> {
       description: '',
       price: 0,
       isFavorite: false);
-  @override
-  void dispose() {
-    imageNode.removeListener(updateImageFocus);
-    titleNode.dispose();
-    imageNode.dispose();
-    priceNode.dispose();
-    desNode.dispose();
-
-    controller3.dispose();
-    super.dispose();
-  }
 
   @override
   void initState() {
@@ -61,22 +45,15 @@ class _EditState extends State<Edit> {
   }
 
   @override
-  void didChangeDependencies() {
-    if (isInit) {
-      if (widget.oldProd.id != null) {
-        _editedProduct = Provider.of<ProductProvider>(context, listen: false)
-            .findbyId(widget.oldProd.id.toString());
-        initialValues = {
-          'title': widget.oldProd.title,
-          'price': widget.oldProd.price.toString(),
-          'description': widget.oldProd.description.toString()
-        };
-        controller3.text = widget.oldProd.imageUrl;
-      }
-    }
-    isInit = false;
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
+  void dispose() {
+    imageNode.removeListener(updateImageFocus);
+    titleNode.dispose();
+    imageNode.dispose();
+    priceNode.dispose();
+    desNode.dispose();
+    cateNode.dispose();
+    controller3.dispose();
+    super.dispose();
   }
 
   void _saveForm() {
@@ -85,28 +62,7 @@ class _EditState extends State<Edit> {
       return;
     }
     _form.currentState!.save();
-    if (widget.oldProd.id != null) {
-      Provider.of<ProductProvider>(context, listen: false)
-          .updateProduct(widget.oldProd.id.toString(), _editedProduct);
-    } else {
-      Provider.of<ProductProvider>(context, listen: false)
-          .addProduct(_editedProduct)
-          .catchError((error) {
-        return showCupertinoDialog(
-            context: context,
-            builder: (ctx) => AlertDialog(
-                  title: Text("Error Occured"),
-                  content: Text(error.toString()),
-                  actions: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.of(ctx).pop();
-                        },
-                        icon: Icon(Icons.exit_to_app))
-                  ],
-                ));
-      });
-    }
+    Provider.of<ProductProvider>(context,listen: false).addProduct(newProduct);
     Navigator.pop(context);
   }
 
@@ -137,7 +93,6 @@ class _EditState extends State<Edit> {
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               Expanded(
                 child: TextFormField(
-                  initialValue: initialValues['title'],
                   decoration: InputDecoration(labelText: 'Title'),
                   focusNode: titleNode,
                   textInputAction: TextInputAction.next,
@@ -147,14 +102,14 @@ class _EditState extends State<Edit> {
                     }
                     return null;
                   },
-                  onSaved: (newValue) => _editedProduct = Product(
-                      id: _editedProduct.id,
+                  onSaved: (newValue) => newProduct = Product(
+                      id: newProduct.id,
                       title: newValue.toString(),
-                      imageUrl: _editedProduct.imageUrl,
-                      category: widget.oldProd.category,
-                      description: _editedProduct.description,
-                      price: _editedProduct.price,
-                      isFavorite: widget.oldProd.isFavorite),
+                      imageUrl: newProduct.imageUrl,
+                      category: newProduct.category,
+                      description: newProduct.description,
+                      price: newProduct.price,
+                      isFavorite: newProduct.isFavorite),
                   onFieldSubmitted: (value) {
                     FocusScope.of(context).requestFocus(priceNode);
                   },
@@ -162,7 +117,6 @@ class _EditState extends State<Edit> {
               ),
               Expanded(
                 child: TextFormField(
-                  initialValue: initialValues['price'],
                   decoration: InputDecoration(labelText: 'Price'),
                   focusNode: priceNode,
                   textInputAction: TextInputAction.next,
@@ -172,14 +126,38 @@ class _EditState extends State<Edit> {
                     }
                     return null;
                   },
-                  onSaved: (newValue) => _editedProduct = Product(
-                      id: _editedProduct.id,
-                      title: _editedProduct.title,
-                      imageUrl: _editedProduct.imageUrl,
-                      category: widget.oldProd.category,
-                      description: _editedProduct.description,
+                  onSaved: (newValue) => newProduct = Product(
+                      id: newProduct.id,
+                      title: newProduct.title,
+                      imageUrl: newProduct.imageUrl,
+                      category: newProduct.category,
+                      description: newProduct.description,
                       price: double.parse(newValue.toString()),
-                      isFavorite: widget.oldProd.isFavorite),
+                      isFavorite: newProduct.isFavorite),
+                  onFieldSubmitted: (value) {
+                    FocusScope.of(context).requestFocus(cateNode);
+                  },
+                ),
+              ),
+              Expanded(
+                child: TextFormField(
+                  decoration: InputDecoration(labelText: 'Category'),
+                  focusNode: cateNode,
+                  textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Input category';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) => newProduct = Product(
+                      id: newProduct.id,
+                      title: newProduct.title,
+                      imageUrl: newProduct.imageUrl,
+                      category: newValue,
+                      description: newProduct.description,
+                      price: newProduct.price,
+                      isFavorite: newProduct.isFavorite),
                   onFieldSubmitted: (value) {
                     FocusScope.of(context).requestFocus(desNode);
                   },
@@ -187,7 +165,6 @@ class _EditState extends State<Edit> {
               ),
               Expanded(
                 child: TextFormField(
-                  initialValue: initialValues['description'],
                   decoration: InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   focusNode: desNode,
@@ -198,14 +175,14 @@ class _EditState extends State<Edit> {
                     }
                     return null;
                   },
-                  onSaved: (newValue) => _editedProduct = Product(
-                      id: _editedProduct.id,
-                      title: _editedProduct.title,
-                      imageUrl: _editedProduct.imageUrl,
-                      category: widget.oldProd.category,
+                  onSaved: (newValue) => newProduct = Product(
+                      id: newProduct.id,
+                      title: newProduct.title,
+                      imageUrl: newProduct.imageUrl,
+                      category: newProduct.category,
                       description: newValue,
-                      price: _editedProduct.price,
-                      isFavorite: widget.oldProd.isFavorite),
+                      price: newProduct.price,
+                      isFavorite: newProduct.isFavorite),
                   onFieldSubmitted: (value) {
                     FocusScope.of(context).requestFocus(imageNode);
                   },
@@ -247,14 +224,14 @@ class _EditState extends State<Edit> {
                         return null;
                       },
                       textInputAction: TextInputAction.done,
-                      onSaved: (newValue) => _editedProduct = Product(
-                          id: _editedProduct.id,
-                          title: _editedProduct.title,
+                      onSaved: (newValue) => newProduct = Product(
+                          id: newProduct.id,
+                          title: newProduct.title,
                           imageUrl: newValue.toString(),
-                          category: widget.oldProd.category,
-                          description: _editedProduct.description,
-                          price: _editedProduct.price,
-                          isFavorite: widget.oldProd.isFavorite),
+                          category: newProduct.category,
+                          description: newProduct.description,
+                          price: newProduct.price,
+                          isFavorite: newProduct.isFavorite),
                     ),
                   )
                 ],

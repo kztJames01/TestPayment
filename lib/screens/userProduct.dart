@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/providers/provider.dart';
+import 'package:flutter_application_1/screens/add_product.dart';
 import 'package:provider/provider.dart';
 
 import 'edit_screen.dart';
@@ -18,12 +19,20 @@ class _UserProductState extends State<UserProduct> {
     final _userProduct = Provider.of<ProductProvider>(context);
     return Scaffold(
       appBar: AppBar(
-          leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      )),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AddProduct.addRoute);
+              },
+              icon: Icon(Icons.add))
+        ],
+      ),
       body: Container(
         child: ListView.builder(
             itemCount: _userProduct.item.length,
@@ -34,7 +43,10 @@ class _UserProductState extends State<UserProduct> {
                   child: Image.network(
                     _userProduct.item[index].imageUrl,
                     errorBuilder: (context, error, stackTrace) =>
-                        Image.network(_userProduct.item[index].imageUrl),
+                        Container(
+                          width: 100,
+                          height: 100,
+                          child: Image.network(_userProduct.item[index].imageUrl)),
                   ),
                 ),
                 title: Text(_userProduct.item[index].title),

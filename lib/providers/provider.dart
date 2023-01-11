@@ -59,27 +59,33 @@ class ProductProvider with ChangeNotifier {
         .toList();
   }
 
-  void addProduct(Product product) {
-    var url =
-        Uri.https('https://fluttertest-50cc9-default-rtdb.firebaseio.com','/products.json');
-    http.post(url, body: json.encode({
-      'title' : product.title,
-      'description' : product.description,
-      'imageUrl' : product.imageUrl,
-      'price' :product.price,
-      'isFavorite' : product.isFavorite
-    }));
-    final newProduct = Product(
-        id: DateTime.now().toString(),
-        title: product.title,
-        imageUrl: product.imageUrl,
-        category: product.category,
-        description: product.description,
-        price: product.price,
-        isFavorite: false);
-    _items.add(newProduct);
-    _items.insert(0, newProduct);
-    notifyListeners();
+  Future<void> addProduct(Product product) {
+    var url = Uri.https(
+        'fluttertest-50cc9-default-rtdb.firebaseio.com', '/products.json');
+    return http
+        .post(url,
+            body: json.encode({
+              'title': product.title,
+              'description': product.description,
+              'imageUrl': product.imageUrl,
+              'price': product.price,
+              'isFavorite': product.isFavorite
+            }))
+        .then((response) {
+      final newProduct = Product(
+          id: json.decode(response.body)['name'],
+          title: product.title,
+          imageUrl: product.imageUrl,
+          category: product.category,
+          description: product.description,
+          price: product.price,
+          isFavorite: false);
+      _items.add(newProduct);
+
+      notifyListeners();
+    }).catchError((error) {
+      throw error;
+    });
   }
 
   Product findbyId(String id) {
@@ -87,19 +93,23 @@ class ProductProvider with ChangeNotifier {
   }
 
   void updateProduct(String id, Product newProduct) {
-    var url =
-        Uri.https('fluttertest-50cc9-default-rtdb.firebaseio.com','/products.json');
-    http.post(url, body: json.encode({
-      'title' : newProduct.title,
-      'description' : newProduct.description,
-      'imageUrl' : newProduct.imageUrl,
-      'price' :newProduct.price,
-      'isFavorite' : newProduct.isFavorite
-    }));
-    final prodIndex = _items.indexWhere((element) => element.id == id);
-    if (prodIndex >= 0) {
-      _items[prodIndex] = newProduct;
-      notifyListeners();
-    }
+    var url = Uri.https(
+        'fluttertest-50cc9-default-rtdb.firebaseio.com', '/products.json');
+    http
+        .post(url,
+            body: json.encode({
+              'title': newProduct.title,
+              'description': newProduct.description,
+              'imageUrl': newProduct.imageUrl,
+              'price': newProduct.price,
+              'isFavorite': newProduct.isFavorite
+            }))
+        .then((response) {
+      final prodIndex = _items.indexWhere((element) => element.id == id);
+      if (prodIndex >= 0) {
+        _items[prodIndex] = newProduct;
+        notifyListeners();
+      }
+    });
   }
 }
