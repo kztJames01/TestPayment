@@ -79,15 +79,19 @@ class _EditState extends State<Edit> {
     super.didChangeDependencies();
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
     _form.currentState!.save();
     if (widget.oldProd.id != null) {
-      Provider.of<ProductProvider>(context, listen: false)
-          .updateProduct(widget.oldProd.id.toString(), _editedProduct);
+      try {
+        await Provider.of<ProductProvider>(context, listen: false)
+            .updateProduct(widget.oldProd.id.toString(), _editedProduct);
+      } catch (error) {
+        print(error);
+      }
     } else {
       Provider.of<ProductProvider>(context, listen: false)
           .addProduct(_editedProduct)

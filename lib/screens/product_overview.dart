@@ -22,6 +22,22 @@ class ProductOverView extends StatefulWidget {
 }
 
 class _ProductOverViewState extends State<ProductOverView> {
+  var isLoading = true;
+  @override
+  void initState() {
+    Provider.of<ProductProvider>(context, listen: false)
+        .fetchData()
+        .then((value) {
+      setState(() {
+        isLoading = false;
+      });
+    });
+    // TODO: implement initState
+    super.initState();
+  }
+  Future<void> _refresh(BuildContext context)async{
+    await Provider.of<ProductProvider>(context,listen: false).fetchData();
+  }
   @override
   Widget build(BuildContext context) {
     final productData = Provider.of<ProductProvider>(context);
@@ -30,20 +46,22 @@ class _ProductOverViewState extends State<ProductOverView> {
         selectedValue == true ? productData.FavouriteItems : productData.item;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: Drawer(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 40,left: 10),
-                    child: ListTile(
-                      leading: Text("Product",style: TextStyle(color: Colors.black),),
-                      onTap: () {
-                        Navigator.of(context).pushNamed(UserProduct.routeName);
-                      },
-                    ),
-                  ),
-                ),
+        drawer: Drawer(
+          child: Container(
+            margin: EdgeInsets.only(top: 40, left: 10),
+            child: ListTile(
+              leading: Text(
+                "Product",
+                style: TextStyle(color: Colors.black),
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed(UserProduct.routeName);
+              },
+            ),
+          ),
+        ),
         appBar: AppBar(
           backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-          
           actions: [
             PopupMenuButton(
                 icon: Icon(FluentIcons.filter_28_regular),
@@ -83,19 +101,23 @@ class _ProductOverViewState extends State<ProductOverView> {
             )
           ],
         ),
-        body: Container(
-            width: size.width,
-            height: size.height * 0.9,
-            child: GridView.builder(
-              itemCount: products.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 3 / 2),
-              itemBuilder: (context, index) => ChangeNotifierProvider.value(
-                  value: products[index], child: productGrid()),
-            )));
+        body: RefreshIndicator(
+          onRefresh: () => _refresh(context),
+          child: Padding(padding: EdgeInsets.all(10),
+          child: isLoading? Center(child: CircularProgressIndicator(),):Container(
+              width: size.width,
+              height: size.height * 0.9,
+              child: GridView.builder(
+                itemCount: products.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 3 / 2),
+                itemBuilder: (context, index) => ChangeNotifierProvider.value(
+                    value: products[index], child: productGrid()),
+              ))),
+        ));
   }
 }
 

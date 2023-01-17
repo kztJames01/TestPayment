@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
@@ -56,14 +57,29 @@ class _AddProductState extends State<AddProduct> {
     super.dispose();
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
     _form.currentState!.save();
-    Provider.of<ProductProvider>(context,listen: false).addProduct(newProduct);
-    Navigator.pop(context);
+    try {
+      await Provider.of<ProductProvider>(context, listen: false)
+          .addProduct(newProduct);
+    } catch (error) {
+      return showCupertinoDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                    },
+                    child: Text("Exit"))
+              ], title: Text("Error"), content: Text(error.toString())));
+    } finally {
+      Navigator.pop(context);
+    }
+    ;
   }
 
   @override
