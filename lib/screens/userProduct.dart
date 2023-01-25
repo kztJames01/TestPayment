@@ -9,12 +9,13 @@ class UserProduct extends StatelessWidget {
   static const routeName = '/userproduct';
   const UserProduct({super.key});
   Future<void> _refresh(BuildContext context) async {
-    await Provider.of<ProductProvider>(context,listen: false).fetchData();
+    await Provider.of<ProductProvider>(context, listen: false).fetchData();
   }
 
   @override
   Widget build(BuildContext context) {
     final _userProduct = Provider.of<ProductProvider>(context);
+    var scaffold = ScaffoldMessenger.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -50,19 +51,46 @@ class UserProduct extends StatelessWidget {
                         errorBuilder: (context, error, stackTrace) => Container(
                             width: 100,
                             height: 100,
-                            child:
-                                Image.network(_userProduct.item[index].imageUrl)),
+                            child: Image.network(
+                                _userProduct.item[index].imageUrl)),
                       ),
                     ),
                   ),
                   title: Text(_userProduct.item[index].title),
-                  trailing: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              Edit(oldProd: _userProduct.item[index])));
-                    },
+                  trailing: Container(
+                    height: 100,
+                    width: 100,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    Edit(oldProd: _userProduct.item[index])));
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          onPressed: () async {
+                            try {
+                              await Provider.of<ProductProvider>(context,
+                                      listen: false)
+                                  .deleteProduct(
+                                      _userProduct.item[index].id.toString());
+                            } catch (error) {
+                              scaffold
+                                  .showSnackBar(SnackBar(
+                                content: Text("Delete Failed"),
+                              ));
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }),

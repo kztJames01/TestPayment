@@ -170,7 +170,7 @@ class productGrid extends StatelessWidget {
                   size: Theme.of(context).iconTheme.size)),
           leading: IconButton(
               onPressed: () {
-                product.toggleFavorite();
+                product.toggleFavorite(product.id.toString());
               },
               icon: Icon(
                   product.isFavorite ? Icons.favorite : Icons.favorite_border,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_application_1/models/http.exception.dart';
 import 'package:flutter_application_1/models/products.dart';
 import 'package:http/http.dart' as http;
 
@@ -78,8 +79,8 @@ class ProductProvider with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((element) => element.id == id);
     if (prodIndex >= 0) {
-      final url = Uri.https(
-          'fluttertest-50cc9-default-rtdb.firebaseio.com', '/products/$id.json');
+      final url = Uri.https('fluttertest-50cc9-default-rtdb.firebaseio.com',
+          '/products/$id.json');
       await http.patch(url,
           body: json.encode({
             'title': newProduct.title,
@@ -90,5 +91,21 @@ class ProductProvider with ChangeNotifier {
       _items[prodIndex] = newProduct;
       notifyListeners();
     }
+  }
+
+  Future<void> deleteProduct(String id) async {
+    final url = Uri.https(
+        'fluttertest-50cc9-default-rtdb.firebaseio.com', '/products/$id.json');
+    final existingItemIndex = _items.indexWhere((prod) => prod.id == id);
+    Product? existingProd = _items[existingItemIndex];
+    _items.removeAt(existingItemIndex);
+    notifyListeners();
+    final response = await http.delete(url);
+    if (response.statusCode >= 400) {
+      _items.insert(existingItemIndex, existingProd);
+      notifyListeners();
+      throw HttpException('Delete incomplete');
+    }
+    existingProd = null;
   }
 }
